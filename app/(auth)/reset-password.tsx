@@ -1,8 +1,6 @@
 import React from 'react';
 import {
   StyleSheet,
-  Platform,
-  KeyboardAvoidingView,
   Alert,
   View,
 } from 'react-native';
@@ -16,6 +14,7 @@ import { Button } from '@/components/forms/Button';
 import { StyledText } from '@/components/StyledText';
 import { useTheme } from '@/hooks/useTheme';
 import api from '@/utils/api';
+import KeyboardScreenWrapper from '@/components/KeyboardScreenWrapper';
 import { useAuth } from '@/contexts/AuthContext';
 import { clearTokens } from '@/utils/storage';
 import { useCustomBack } from '@/hooks/useCustomBack';
@@ -50,7 +49,7 @@ export default function ResetPasswordScreen() {
   const router = useRouter();
   const { token } = useLocalSearchParams<{ token?: string }>();
   const { user, signOut } = useAuth();
-  
+
   const fallback = user ? '/(tabs)/profile' : '/(auth)/login';
   useCustomBack(fallback);
 
@@ -119,11 +118,9 @@ export default function ResetPasswordScreen() {
   };
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.white }]}
-    >
+    <KeyboardScreenWrapper backgroundColor={theme.white} contentContainerStyle={styles.container}>
       {showEmailForm ? (
-        <>
+        <View>
           <StyledText style={[styles.title, { color: theme.greenLight }]}>
             Recuperar senha
           </StyledText>
@@ -142,9 +139,9 @@ export default function ResetPasswordScreen() {
             loading={isSendingEmail}
             style={styles.button}
           />
-        </>
+        </View>
       ) : (
-        <>
+        <View>
           <StyledText style={[styles.title, { color: theme.greenLight }]}>
             {isOAuthUserWithoutPassword ? 'Criar senha' : 'Redefinir senha'}
           </StyledText>
@@ -171,9 +168,9 @@ export default function ResetPasswordScreen() {
             loading={isUpdatingPwd}
             style={styles.button}
           />
-        </>
+        </View>
       )}
-    </View>
+    </KeyboardScreenWrapper>
   );
 }
 

@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 import {
   View,
   StyleSheet,
-  Platform,
-  KeyboardAvoidingView,
   Alert,
 } from 'react-native'
 import { useForm } from 'react-hook-form'
@@ -18,6 +16,7 @@ import { useTheme } from '@/hooks/useTheme'
 import { router } from 'expo-router'
 import GoogleIcon from '@/components/icons/GoogleIcon'
 import api from '@/utils/api'
+import KeyboardScreenWrapper from '@/components/KeyboardScreenWrapper'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/utils/supabase'
 import * as WebBrowser from 'expo-web-browser'
@@ -138,9 +137,7 @@ export default function LoginScreen() {
   }
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.white }]}
-    >
+    <KeyboardScreenWrapper backgroundColor={theme.white} contentContainerStyle={styles.container}>
       <StyledText style={[styles.title, { color: theme.greenLight }]}>
         Login
       </StyledText>
@@ -202,7 +199,7 @@ export default function LoginScreen() {
           </StyledText>
         </View>
       </View>
-    </View>
+    </KeyboardScreenWrapper>
   )
 }
 

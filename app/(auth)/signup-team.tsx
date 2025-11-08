@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -15,6 +15,7 @@ import { router } from 'expo-router';
 import { StyledText } from '@/components/StyledText';
 import { AppLoader } from '@/components/AppLoader';
 import { setUserRegistered } from '@/utils/storage';
+import { Ionicons } from '@expo/vector-icons';
 
 
 const positionOptions: Record<string, { label: string; value: string }[]> = {
@@ -47,6 +48,29 @@ export default function SignUpTeamScreen() {
   const [games, setGames] = useState<{ id: string; name: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const gamesList = games;
+
+  const styles = StyleSheet.create({
+    container: {
+      flexGrow: 1,
+      padding: 24,
+      paddingVertical: 120,
+      backgroundColor: theme.white,
+    },
+    title: {
+      fontSize: 32,
+      textAlign: 'center',
+      marginBottom: 40,
+      fontWeight: 'bold',
+      color: theme.greenLight
+    },
+    backButton: {
+      position: 'absolute',
+      top: 24,
+      left: 24,
+      zIndex: 10,
+      padding: 8,
+    },
+  });
 
 
   const schema = z
@@ -225,8 +249,15 @@ export default function SignUpTeamScreen() {
   }
 
   return (
-    <View style={styles(theme).container}>
-      <StyledText style={styles(theme).title}>Escolha seu Time</StyledText>
+    <View style={styles.container}>
+      <TouchableOpacity 
+        style={styles.backButton} 
+        onPress={() => router.back()}
+        activeOpacity={0.7}
+      >
+        <Ionicons name="arrow-back" size={24} color={theme.greenLight} />
+      </TouchableOpacity>
+      <StyledText style={styles.title}>Escolha seu Time</StyledText>
       <SelectField
         name="team"
         label="Time favorito"
@@ -246,7 +277,7 @@ export default function SignUpTeamScreen() {
       </View>
 
       {isAthlete && (
-        <>
+        <View>
           <SelectField
             name="modality"
             label="Modalidade"
@@ -275,7 +306,7 @@ export default function SignUpTeamScreen() {
               keyboardType="numeric"
             />
           )}
-        </>
+        </View>
       )}
 
       <Button
@@ -289,19 +320,3 @@ export default function SignUpTeamScreen() {
   );
 }
 
-const styles = (theme: any) =>
-  StyleSheet.create({
-    container: {
-      flexGrow: 1,
-      padding: 24,
-      paddingVertical: 120,
-      backgroundColor: theme.white,
-    },
-    title: {
-      fontSize: 32,
-      textAlign: 'center',
-      marginBottom: 40,
-      fontWeight: 'bold',
-      color: theme.greenLight
-    },
-  });

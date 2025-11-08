@@ -1,7 +1,7 @@
 // app/(auth)/signup-birthday.tsx
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +10,8 @@ import { StyledText } from '@/components/StyledText';
 import { useTheme } from '@/hooks/useTheme';
 import { useSignUp } from '@/contexts/SignUpContext';
 import { router } from 'expo-router';
-import { DatePickerField } from '@/components/forms/DatePickerField'; // seu componente customizado
+import { DatePickerField } from '@/components/forms/DatePickerField';
+import { Ionicons } from '@expo/vector-icons';
 
 const schema = z.object({
   birthdate: z.date({
@@ -31,6 +32,13 @@ export default function SignUpBirthdayScreen() {
       padding: 24,
       justifyContent: 'center',
       backgroundColor: '#fff',
+    },
+    backButton: {
+      position: 'absolute',
+      top: 24,
+      left: 24,
+      zIndex: 10,
+      padding: 8,
     },
     title: {
       fontSize: 32,
@@ -60,6 +68,14 @@ export default function SignUpBirthdayScreen() {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity 
+        style={styles.backButton} 
+        onPress={() => router.back()}
+        activeOpacity={0.7}
+      >
+        <Ionicons name="arrow-back" size={24} color={theme.greenLight} />
+      </TouchableOpacity>
+
       <StyledText style={styles.title}>Data de Nascimento</StyledText>
       <DatePickerField
         name="birthdate"

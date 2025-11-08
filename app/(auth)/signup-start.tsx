@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, Platform, View, TouchableOpacity } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,6 +11,11 @@ import { StyledText } from '@/components/StyledText';
 import { useTheme } from '@/hooks/useTheme';
 import { router } from 'expo-router';
 import { useSignUp } from '@/contexts/SignUpContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
+import KeyboardScreenWrapper from '@/components/KeyboardScreenWrapper';
+import { Ionicons } from '@expo/vector-icons';
+
 
 // Schema com validação assíncrona de e-mail duplicado
 const signUpSchema = z
@@ -47,7 +52,7 @@ export default function SignUpStart() {
     container: {
       flex: 1,
       padding: 24,
-      paddingTop: 48,
+      justifyContent: 'center',
       backgroundColor: theme.white,
     },
     title: {
@@ -55,6 +60,13 @@ export default function SignUpStart() {
       textAlign: 'center',
       marginBottom: 24,
       color: theme.greenLight,
+    },
+    backButton: {
+      position: 'absolute',
+      top: 24,
+      left: 24,
+      zIndex: 10,
+      padding: 8,
     },
   });
 
@@ -78,50 +90,59 @@ export default function SignUpStart() {
     router.push('/(auth)/signup-birthday');
   }
 
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <KeyboardScreenWrapper backgroundColor={theme.white} contentContainerStyle={styles.container}>
+      <TouchableOpacity 
+        style={styles.backButton} 
+        onPress={() => router.back()}
+        activeOpacity={0.7}
+      >
+        <Ionicons name="arrow-back" size={24} color={theme.greenLight} />
+      </TouchableOpacity>
       <StyledText style={styles.title}>Criar Conta</StyledText>
+      <View style={{ gap: 0 }}>
+        <InputField
+          name="name"
+          label="Nome"
+          placeholder="Nome"
+          control={control}
 
-      <InputField
-        name="name"
-        label="Nome"
-        placeholder="Nome"
-        control={control}
-        
-      />
+        />
 
-      <InputField
-        name="email"
-        label="E-mail"
-        placeholder="Email"
-        control={control}
-        keyboardType="email-address"
-       
-      />
+        <InputField
+          name="email"
+          label="E-mail"
+          placeholder="Email"
+          control={control}
+          keyboardType="email-address"
 
-      <InputField
-        name="password"
-        label="Senha"
-        placeholder="Senha"
-        control={control}
-        secure
-       
-      />
+        />
 
-      <InputField
-        name="confirmPassword"
-        label="Confirmar senha"
-        placeholder="Confirmar senha"
-        control={control}
-        secure
-      />
+        <InputField
+          name="password"
+          label="Senha"
+          placeholder="Senha"
+          control={control}
+          secure
 
-      <Button
-        title="Próximo"
-        onPress={handleSubmit(onSubmit)}
-        loading={isSubmitting}
-        style={{ marginTop: 16 }}
-      />
-    </View>
+        />
+
+        <InputField
+          name="confirmPassword"
+          label="Confirmar senha"
+          placeholder="Confirmar senha"
+          control={control}
+          secure
+        />
+
+        <Button
+          title="Próximo"
+          onPress={handleSubmit(onSubmit)}
+          loading={isSubmitting}
+          style={{ marginTop: 16 }}
+        />
+      </View>
+    </KeyboardScreenWrapper>
   );
 }
